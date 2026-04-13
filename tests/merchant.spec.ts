@@ -1,12 +1,8 @@
 import { test, expect } from '@playwright/test';
 import * as dotenv from 'dotenv';
 
-// Memuat variabel environment dari file .env
 dotenv.config();
 
-// =====================================================================
-// PENGUJIAN MERCHANT LIST
-// =====================================================================
 test.describe('Fitur Halaman Merchant List', () => {
 
   // --- BEFORE EACH: Setup Login & Masuk ke Menu ---
@@ -75,19 +71,15 @@ test.describe('Fitur Halaman Merchant List', () => {
 
 });
 
-// =====================================================================
-// PENGUJIAN MERCHANT DETAIL
-// =====================================================================
 test.describe('Fitur Halaman Merchant Detail', () => {
 
   test.beforeEach(async ({ page }) => {
-    // URL, Email, dan Password menggunakan .env
+   
     await page.goto(`${process.env.BASE_URL}/login`);
     await page.getByRole('textbox', { name: 'Enter your email address' }).fill(process.env.LOGIN_EMAIL as string);
     await page.getByRole('textbox', { name: 'Enter your password' }).fill(process.env.LOGIN_PASSWORD as string);
     await page.getByRole('button', { name: 'Sign In' }).click();
 
-    // Tunggu loading pop-up dan masuk home
     await expect(page).toHaveURL(`${process.env.BASE_URL}/splashscreen`);
     await expect(page.getByText('Login successfully')).toBeVisible();
     await expect(page).toHaveURL(`${process.env.BASE_URL}/home`);
@@ -100,12 +92,11 @@ test.describe('Fitur Halaman Merchant Detail', () => {
 
     // MEMBUKA DETAIL MERCHANT
     await page.locator('.cursor-pointer.rounded-md').first().click();
-
-    // Pastikan halaman detail sudah siap sebelum skenario berjalan
+   
     await expect(page.getByRole('button', { name: 'Outlet List' })).toBeVisible({ timeout: 15000 });
   });
 
-  // --- SKENARIO 1: TAB INFO 
+  // TAB INFO 
   test('Eksplorasi Tab Info (Membuka Accordion)', async ({ page }) => {
     // Membuka bagian-bagian dropdown (accordion) di Info
     await page.getByRole('button', { name: 'Location' }).click();
@@ -113,7 +104,7 @@ test.describe('Fitur Halaman Merchant Detail', () => {
     await page.getByRole('button', { name: 'Settlement & Payment' }).click();
   });
 
-  // --- SKENARIO 2: TAB OUTLET LIST 
+  // TAB OUTLET LIST 
   test('Eksplorasi Tab Outlet List', async ({ page }) => {
     // Pindah ke tab Outlet List
     await page.getByRole('button', { name: 'Outlet List' }).click();
@@ -131,7 +122,7 @@ test.describe('Fitur Halaman Merchant Detail', () => {
     await expect(page.getByText('No outlets have been created yet')).toBeVisible();
   });
 
-  // --- SKENARIO 3: TAB BRAND ---
+  // TAB BRAND
   test('Eksplorasi Tab Brand', async ({ page }) => {
     test.setTimeout(60000);
 
